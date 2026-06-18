@@ -1,11 +1,239 @@
 import flet as ft
+import re
+
+from crypto_utils import encrypt_seed
+
 
 def main(page: ft.Page):
+
     page.title = "DSB"
+    page.window.width = 1200
+    page.window.height = 750
+    page.padding = 20
 
-    page.add(
-        ft.Text("Digital Seed Phrase Backup"),
-        ft.ElevatedButton("Test")
-    )
+    # ---------------- HOME ----------------
 
-ft.app(main)
+    def show_home(e=None):
+
+        page.clean()
+
+        page.add(
+            ft.Column(
+                [
+                    ft.Text(
+                        "Digital Seed Phrase Backup",
+                        size=28,
+                        weight=ft.FontWeight.BOLD,
+                    ),
+                    ft.Divider(),
+                    ft.ElevatedButton(
+                        "Encrypt",
+                        width=250,
+                        on_click=show_encrypt,
+                    ),
+                    ft.ElevatedButton(
+                        "Decrypt",
+                        width=250,
+                        on_click=show_decrypt,
+                    ),
+                ],
+                spacing=20,
+            )
+        )
+
+        page.update()
+
+    # ---------------- ENCRYPT ----------------
+
+    def show_encrypt(e=None):
+
+        page.clean()
+
+        seed_fields = []
+
+        for i in range(24):
+            seed_fields.append(
+                ft.TextField(
+                    label=f"{i + 1:02d}",
+                    width=150,
+                )
+            )
+
+        seed_fields.append(
+            ft.TextField(
+                label="25 Optional",
+                width=150,
+                border_color=ft.Colors.AMBER,
+            )
+        )
+
+        rows = []
+
+        for i in range(0, 25, 5):
+            rows.append(
+                ft.Row(
+                    seed_fields[i:i + 5],
+                    spacing=10,
+                )
+            )
+
+        destination = ft.TextField(
+            label="File Destination",
+            value="seed.dsb",
+            width=500,
+        )
+
+        password = ft.TextField(
+            label="Encryption Password",
+            password=True,
+            can_reveal_password=True,
+            width=350,
+        )
+
+        strength = ft.Text()
+
+        encrypt_btn = ft.ElevatedButton(
+            "Encrypt",
+            disabled=True,
+        )
+
+        def validate_password(e):
+
+            pwd = password.value or ""
+
+            checks = [
+                len(pwd) >= 12,
+                bool(re.search(r"[A-Z]", pwd)),
+                bool(re.search(r"[a-z]", pwd)),
+                bool(re.search(r"\d", pwd)),
+                bool(re.search(r"[^A-Za-z0-9]", pwd)),
+            ]
+
+            strength.value = (
+                f"{'✓' if checks[0] else '✗'} Length >= 12\n"
+                f"{'✓' if checks[1] else '✗'} Uppercase\n"
+                f"{'✓' if checks[2] else '✗'} Lowercase\n"
+                f"{'✓' if checks[3] else '✗'} Number\n"
+                f"{'✓' if checks[4] else '✗'} Symbol"
+            )
+
+            encrypt_btn.disabled = not all(checks)
+
+            page.update()
+
+        password.on_change = validate_password
+
+        def do_encrypt(e):
+
+            try:
+
+                words = []
+
+                for field in seed_fields:
+                    value = (field.value or "").strip()
+
+                    if value:
+                        words.append(value)
+
+                seed_text = " ".join(words)
+
+                encrypt_seed(
+                    seed_text,
+                    password.value,
+                    destination.value,
+                )
+
+                page.snack_bar = ft.SnackBar(
+                    ft.Text("Backup created successfully")
+                )
+
+            except Exception as ex:
+
+                page.snack_bar = ft.SnackBar(
+                    ft.Text(f"Error: {ex}")
+                )
+
+            page.snack_bar.open = True
+            page.update()
+
+        encrypt_btn.on_click = do_encrypt
+
+        page.add(
+            ft.Column(
+                [
+                    ft.Row(
+                        [
+                            ft.IconButton(
+                                icon=ft.Icons.ARROW_BACK,
+                                on_click=show_home,
+                            ),
+                            ft.Text(
+                                "Encrypt Seed Phrase",
+                                size=24,
+                                weight=ft.FontWeight.BOLD,
+                            ),
+                        ]
+                    ),
+                    ft.Divider(),
+                    *rows,
+                    ft.Divider(),
+                    destination,
+                    password,
+                    strength,
+                    encrypt_btn,
+                ],
+                spacing=10,
+            )
+        )
+
+        page.update()
+
+    # ---------------- DECRYPT ----------------
+
+    def show_decrypt(e=None):
+
+        page.clean()
+
+        encrypted_file = ft.TextField(
+            label="Encrypted File",
+            value="seed.dsb",
+            width=500,
+        )
+
+        password = ft.TextField(
+            label="Password",
+            password=True,
+            can_reveal_password=True,
+            width=350,
+        )
+
+        page.add(
+            ft.Column(
+                [
+                    ft.Row(
+                        [
+                            ft.IconButton(
+                                icon=ft.Icons.ARROW_BACK,
+                                on_click=show_home,
+                            ),
+                            ft.Text(
+                                "Decrypt Backup",
+                                size=24,
+                                weight=ft.FontWeight.BOLD,
+                            ),
+                        ]
+                    ),
+                    ft.Divider(),
+                    encrypted_file,
+                    password,
+                    ft.ElevatedButton("Decrypt"),
+                ]
+            )
+        )
+
+        page.update()
+
+    show_home()
+
+
+ft.app(target=main)
