@@ -2,7 +2,7 @@ import flet as ft
 import re
 
 from crypto_utils import encrypt_seed
-
+from crypto_utils import decrypt_seed
 
 def main(page: ft.Page):
 
@@ -135,7 +135,7 @@ def main(page: ft.Page):
                     if value:
                         words.append(value)
 
-                seed_text = " ".join(words)
+                seed_text = "|".join(words)
 
                 encrypt_seed(
                     seed_text,
@@ -189,7 +189,6 @@ def main(page: ft.Page):
         page.update()
 
     # ---------------- DECRYPT ----------------
-
     def show_decrypt(e=None):
 
         page.clean()
@@ -206,6 +205,49 @@ def main(page: ft.Page):
             can_reveal_password=True,
             width=350,
         )
+
+        result_fields = []
+
+        for i in range(25):
+            result_fields.append(
+                ft.TextField(
+                    label=f"{i+1:02d}",
+                    width=150,
+                    read_only=True,
+                )
+            )
+
+        rows = [
+            ft.Row(result_fields[i:i+5], spacing=10)
+            for i in range(0, 25, 5)
+        ]
+
+        def do_decrypt(e):
+
+            try:
+
+                seed_text = decrypt_seed(
+                    password.value,
+                    encrypted_file.value,
+                )
+
+                words = seed_text.split("|")
+
+                for i in range(min(len(words), 25)):
+                    result_fields[i].value = words[i]
+
+                page.snack_bar = ft.SnackBar(
+                    ft.Text("Decrypted successfully")
+                )
+
+            except Exception as ex:
+
+                page.snack_bar = ft.SnackBar(
+                    ft.Text(f"Error: {ex}")
+                )
+
+            page.snack_bar.open = True
+            page.update()
 
         page.add(
             ft.Column(
@@ -226,7 +268,9 @@ def main(page: ft.Page):
                     ft.Divider(),
                     encrypted_file,
                     password,
-                    ft.ElevatedButton("Decrypt"),
+                    ft.ElevatedButton("Decrypt", on_click=do_decrypt),
+                    ft.Divider(),
+                    *rows,
                 ]
             )
         )
