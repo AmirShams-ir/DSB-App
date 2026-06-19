@@ -1,1 +1,0 @@
-{"version": 1, "algorithm": "AES-256-GCM", "kdf": "Argon2id", "salt": "84cb4413af637de0ad6aa62fee72de2c", "nonce": "ad6d8b819ad714d314dec24e", "ciphertext": "0279676230ed9e490f7373d7b4868a7701547d8ee2ad80375183ebfcb2803ddf9244cefc0f108f5f927e3e5a3012aa74fce33a59aee3dc99efabe1a4db1bcea515"}

@@ -7,9 +7,9 @@ from crypto_utils import decrypt_seed
 def main(page: ft.Page):
 
     page.title = "DSB"
-    page.window.width = 1200
+    page.window.width = 900
     page.window.height = 750
-    page.padding = 20
+    page.padding = 15
 
     # ---------------- HOME ----------------
 
@@ -208,14 +208,23 @@ def main(page: ft.Page):
 
         result_fields = []
 
-        for i in range(25):
+        for i in range(24):
             result_fields.append(
                 ft.TextField(
-                    label=f"{i+1:02d}",
+                    label=f"{i + 1:02d}",
                     width=150,
                     read_only=True,
                 )
             )
+
+        result_fields.append(
+            ft.TextField(
+                label="25 Optional",
+                width=150,
+                read_only=True,
+                border_color=ft.Colors.AMBER,
+            )
+        )
 
         rows = [
             ft.Row(result_fields[i:i+5], spacing=10)
