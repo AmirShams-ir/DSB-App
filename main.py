@@ -7,7 +7,7 @@ from crypto_utils import decrypt_seed
 def main(page: ft.Page):
 
     page.title = "DSB"
-    page.window.width = 900
+    page.window.width = 850
     page.window.height = 750
     page.padding = 15
 
@@ -26,12 +26,12 @@ def main(page: ft.Page):
                         weight=ft.FontWeight.BOLD,
                     ),
                     ft.Divider(),
-                    ft.ElevatedButton(
+                    ft.Button(
                         "Encrypt",
                         width=250,
                         on_click=show_encrypt,
                     ),
-                    ft.ElevatedButton(
+                    ft.Button(
                         "Decrypt",
                         width=250,
                         on_click=show_decrypt,
@@ -92,7 +92,7 @@ def main(page: ft.Page):
 
         strength = ft.Text()
 
-        encrypt_btn = ft.ElevatedButton(
+        encrypt_btn = ft.Button(
             "Encrypt",
             disabled=True,
         )
@@ -143,17 +143,19 @@ def main(page: ft.Page):
                     destination.value,
                 )
 
-                page.snack_bar = ft.SnackBar(
-                    ft.Text("Backup created successfully")
+                page.show_dialog(
+                    ft.SnackBar(
+                        content=ft.Text("Backup encrypted successfully")
+                    )
                 )
 
             except Exception as ex:
-
-                page.snack_bar = ft.SnackBar(
-                    ft.Text(f"Error: {ex}")
+                page.show_dialog(
+                    ft.SnackBar(
+                        content=ft.Text(f"Error: {ex}"),
+                        bgcolor=ft.Colors.RED,
+                    )
                 )
-
-            page.snack_bar.open = True
             page.update()
 
         encrypt_btn.on_click = do_encrypt
@@ -245,17 +247,19 @@ def main(page: ft.Page):
                 for i in range(min(len(words), 25)):
                     result_fields[i].value = words[i]
 
-                page.snack_bar = ft.SnackBar(
-                    ft.Text("Decrypted successfully")
+                page.show_dialog(
+                    ft.SnackBar(
+                        content=ft.Text("Backup decrypted successfully")
+                    )
                 )
 
             except Exception as ex:
-
-                page.snack_bar = ft.SnackBar(
-                    ft.Text(f"Error: {ex}")
+                page.show_dialog(
+                    ft.SnackBar(
+                        content=ft.Text(f"Error: {ex}"),
+                        bgcolor=ft.Colors.RED,
+                    )
                 )
-
-            page.snack_bar.open = True
             page.update()
 
         page.add(
@@ -277,7 +281,7 @@ def main(page: ft.Page):
                     ft.Divider(),
                     encrypted_file,
                     password,
-                    ft.ElevatedButton("Decrypt", on_click=do_decrypt),
+                    ft.Button("Decrypt", on_click=do_decrypt),
                     ft.Divider(),
                     *rows,
                 ]
@@ -289,4 +293,5 @@ def main(page: ft.Page):
     show_home()
 
 
-ft.app(target=main)
+if __name__ == "__main__":
+    ft.run(main)
