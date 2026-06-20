@@ -13,7 +13,6 @@ def main(page: ft.Page):
     page.window.width = 850
     page.window.height = 750
     page.padding = 15
-    file_picker = ft.FilePicker()
 
     # ---------------- HOME ----------------
 
@@ -83,25 +82,9 @@ def main(page: ft.Page):
 
         destination = ft.TextField(
             label="File Destination",
-            value="File path",
+            value="seed.dsb",
             width=500,
         )
-
-        async def choose_destination(e):
-
-            selected_path = await file_picker.save_file(
-                dialog_title="Save encrypted backup",
-                file_name="seed.dsb",
-                file_type=ft.FilePickerFileType.CUSTOM,
-                allowed_extensions=["dsb"],
-            )
-
-            if selected_path:
-                if not selected_path.lower().endswith(".dsb"):
-                    selected_path += ".dsb"
-
-                destination.value = selected_path
-                page.update()
 
         password = ft.TextField(
             label="Encryption Password",
@@ -211,16 +194,7 @@ def main(page: ft.Page):
                     ft.Divider(),
                     *rows,
                     ft.Divider(),
-                    ft.Row(
-                        [
-                            destination,
-                            ft.IconButton(
-                                icon=ft.Icons.FOLDER_OPEN,
-                                tooltip="Choose save location",
-                                on_click=choose_destination,
-                            ),
-                        ]
-                    ),
+                    destination,
                     password,
                     strength,
                     encrypt_btn,
@@ -238,22 +212,9 @@ def main(page: ft.Page):
 
         encrypted_file = ft.TextField(
             label="Encrypted File",
-            value="File path",
+            value="seed.dsb",
             width=500,
         )
-
-        async def choose_encrypted_file(e):
-
-            selected_files = await file_picker.pick_files(
-                dialog_title="Open encrypted backup",
-                file_type=ft.FilePickerFileType.CUSTOM,
-                allowed_extensions=["dsb"],
-                allow_multiple=False,
-            )
-
-            if selected_files and selected_files[0].path:
-                encrypted_file.value = selected_files[0].path
-                page.update()
 
         password = ft.TextField(
             label="Password",
@@ -333,16 +294,7 @@ def main(page: ft.Page):
                         ]
                     ),
                     ft.Divider(),
-                    ft.Row(
-                        [
-                            encrypted_file,
-                            ft.IconButton(
-                                icon=ft.Icons.FOLDER_OPEN,
-                                tooltip="Choose encrypted backup",
-                                on_click=choose_encrypted_file,
-                            ),
-                        ]
-                    ),
+                    encrypted_file,
                     password,
                     ft.Button("Decrypt", on_click=do_decrypt),
                     ft.Divider(),
