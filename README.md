@@ -32,9 +32,7 @@ container.
 
 ## ✨ Why DSB?
 
-Plain-text seed backups are easy to read, copy, photograph, index, or leak.
-DSB provides a small desktop interface for creating an encrypted backup without
-requiring a remote service or network connection.
+Plain-text seed backups are easy to read, copy, photograph, index, or leak. DSB provides a small desktop/mobile interface for creating an encrypted backup without requiring a remote service or network connection with maximum security.
 
 The current implementation provides:
 

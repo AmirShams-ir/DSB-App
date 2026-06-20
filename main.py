@@ -25,18 +25,58 @@ def main(page: ft.Page):
             ft.Column(
                 [
                     ft.Text(
-                        "Digital Seed Phrase Backup",
+                        "🗝️ Digital Seed Phrase Backup",
                         size=28,
                         weight=ft.FontWeight.BOLD,
                     ),
                     ft.Divider(),
+                    
+                    ft.Text(
+                        "🛡️ What is DSB ?",
+                        size=20,
+                        weight=ft.FontWeight.BOLD,
+                    ),
+                    
+                    ft.Text(
+                        "Plain-text seed backups are easy to read, copy, photograph, index, or leak. DSB provides a small desktop/mobile interface for creating an encrypted backup without requiring a remote service or network connection with maximum security.",
+                        size=16,
+                        weight=ft.FontWeight.BOLD,
+                    ),
+                    ft.Divider(),
+                    
+                    ft.Text(
+                        "Encryption:",
+                        size=20,
+                        weight=ft.FontWeight.BOLD,
+                    ),
+                    
+                    ft.Text(
+                        "Enter your seed pharase  in order, Optionally enter the wallet passphrase, Choose the destination file path, Enter a strong password, Select Encrypt.",
+                        size=16,
+                        weight=ft.FontWeight.BOLD,
+                    ),
+                    
                     ft.Button(
-                        "Encrypt",
+                        "🔒Encrypt",
                         width=250,
                         on_click=show_encrypt,
                     ),
+                    ft.Divider(),
+                    
+                    ft.Text(
+                        "Decryption:",
+                        size=20,
+                        weight=ft.FontWeight.BOLD,
+                    ),
+                    
+                    ft.Text(
+                        "Select your backup file, Enter the encryption password, Select Decrypt, The recovered seed pharase and passphrase appear in read-only fields.",
+                        size=16,
+                        weight=ft.FontWeight.BOLD,
+                    ),
+                    
                     ft.Button(
-                        "Decrypt",
+                        "🔓Decrypt",
                         width=250,
                         on_click=show_decrypt,
                     ),
