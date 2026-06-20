@@ -23,3 +23,7 @@ Thumbs.db
 *.key
 *.pem
 .env
+
+# file
+*.dsb
+*.bin

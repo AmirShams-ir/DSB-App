@@ -91,14 +91,14 @@ def main(page: ft.Page):
 
             selected_path = await file_picker.save_file(
                 dialog_title="Save encrypted backup",
-                file_name="seed.dsb",
+                file_name="seed.bin",
                 file_type=ft.FilePickerFileType.CUSTOM,
-                allowed_extensions=["dsb"],
+                allowed_extensions=["bin"],
             )
 
             if selected_path:
-                if not selected_path.lower().endswith(".dsb"):
-                    selected_path += ".dsb"
+                if not selected_path.lower().endswith(".bin"):
+                    selected_path += ".bin"
 
                 destination.value = selected_path
                 page.update()
@@ -146,6 +146,15 @@ def main(page: ft.Page):
         def do_encrypt(e):
 
             try:
+                output_path = (destination.value or "").strip()
+
+                if not output_path or output_path == "File path":
+                    raise ValueError("Please choose a destination file")
+
+                if not output_path.lower().endswith(".bin"):
+                    output_path += ".bin"
+                    destination.value = output_path
+
                 words = [
                     (field.value or "").strip().lower()
                     for field in seed_fields[:24]
@@ -172,7 +181,7 @@ def main(page: ft.Page):
                 encrypt_seed(
                     seed_text,
                     password.value,
-                    destination.value,
+                    output_path,
                 )
 
                 page.show_dialog(
@@ -247,7 +256,7 @@ def main(page: ft.Page):
             selected_files = await file_picker.pick_files(
                 dialog_title="Open encrypted backup",
                 file_type=ft.FilePickerFileType.CUSTOM,
-                allowed_extensions=["dsb"],
+                allowed_extensions=["bin", "dsb"],
                 allow_multiple=False,
             )
 
