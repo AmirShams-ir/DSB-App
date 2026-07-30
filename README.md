@@ -397,6 +397,18 @@ recovery process before relying on it.
 
 ---
 
+## 📝 Citation
+
+If you use DSB in your work, please cite:
+
+Shams Amir.
+
+DSB: Local-First Offline Backup for Cryptocurrency Seed Phrases.
+
+Zenodo, DOI:10.5281/zenodo.21710009
+
+---
+
 <div align="center">
 
 ### Built for one job: keep a readable seed phrase out of a readable file.
