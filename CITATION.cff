@@ -1,0 +1,21 @@
+cff-version: 1.2.0
+message: "If you use DSB in your research, please cite it as follows."
+
+title: "DSB: Local-First Offline Backup for Cryptocurrency Seed Phrases"
+
+version: "1.0.0"
+
+doi: 10.5281/zenodo.21710009
+
+date-released: 2026-07-30
+
+license: Apache-2.0
+
+authors:
+  - family-names: Shams
+    given-names: Amir
+    orcid: "https://orcid.org/0000-0001-9270-4627"
+
+repository-code: "https://github.com/AmirShams-ir/DSB-App"
+
+url: "https://github.com/AmirShams-ir/DSB-App"
